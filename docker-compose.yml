@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: backend-dukcapil
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    networks:
+      - dukcapil-network
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-dukcapil
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: dukcapil
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - dukcapil-network
+
+volumes:
+  mysql_data:
+
+networks:
+  dukcapil-network:
+    driver: bridge
